@@ -1,0 +1,13 @@
+{
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    },
+    "require": {
+        "brick/math": "^0.12.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10"
+    }
+}
