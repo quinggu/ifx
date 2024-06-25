@@ -3,11 +3,13 @@
 namespace tests\Application;
 
 use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 use Currency;
 use CurrencyExchangeService;
 use ExchangeCalculationService;
 use ExchangeCurrencyCommand;
 use ExchangeRate;
+use Fee;
 use InMemoryExchangeRateRepository;
 use PHPUnit\Framework\TestCase;
 
@@ -22,26 +24,45 @@ final class CurrencyExchangeServiceTest extends TestCase
             new ExchangeRate(new Currency('GBP'), new Currency('EUR'), BigDecimal::of('1.5432'))
         ];
 
+        $fee = new Fee('0.01');
         $repository = new InMemoryExchangeRateRepository($exchangeRates);
         $calculationService = new ExchangeCalculationService();
-        $this->service = new CurrencyExchangeService($repository, $calculationService);
+        $this->service = new CurrencyExchangeService($repository, $calculationService, $fee);
     }
 
-    public function testExchangeEURToGBP(): void
+    public function testSellEURToGBP(): void
     {
-        $command = new ExchangeCurrencyCommand('EUR', 'GBP', BigDecimal::of('100.0'));
-        $transaction = $this->service->exchangeCurrency($command);
+        $command = new ExchangeCurrencyCommand('EUR', 'GBP', BigDecimal::of('100.00'));
+        $transaction = $this->service->sell($command);
 
         $this->assertEquals('GBP', $transaction->getTargetMoney()->getCurrency()->getCode());
-        $this->assertEquals(BigDecimal::of('154.14'), $transaction->getTargetMoney()->getAmount()->withScale(2)); // 100 * 1.5678 - 1%
+        $this->assertEquals(BigDecimal::of('155.21'), $transaction->getTargetMoney()->getAmount()->toScale(2,RoundingMode::HALF_UP));
     }
 
-    public function testExchangeGBPToEUR(): void
+    public function testSellGBPToEUR(): void
     {
         $command = new ExchangeCurrencyCommand('GBP', 'EUR', BigDecimal::of('100.0'));
-        $transaction = $this->service->exchangeCurrency($command);
+        $transaction = $this->service->sell($command);
 
         $this->assertEquals('EUR', $transaction->getTargetMoney()->getCurrency()->getCode());
-        $this->assertEquals(BigDecimal::of('152.76'), $transaction->getTargetMoney()->getAmount()->withScale(2)); // 100 * 1.5432 - 1%
+        $this->assertEquals(BigDecimal::of('152.78'), $transaction->getTargetMoney()->getAmount()->toScale(2, RoundingMode::HALF_UP));
+    }
+
+    public function testBuyEURToGBP(): void
+    {
+        $command = new ExchangeCurrencyCommand('EUR', 'GBP', BigDecimal::of('100.00'));
+        $transaction = $this->service->buy($command);
+
+        $this->assertEquals('GBP', $transaction->getTargetMoney()->getCurrency()->getCode());
+        $this->assertEquals(BigDecimal::of('155.21'), $transaction->getTargetMoney()->getAmount()->toScale(2,RoundingMode::HALF_UP));
+    }
+
+    public function testBuyGBPToEUR(): void
+    {
+        $command = new ExchangeCurrencyCommand('GBP', 'EUR', BigDecimal::of('100.0'));
+        $transaction = $this->service->buy($command);
+
+        $this->assertEquals('EUR', $transaction->getTargetMoney()->getCurrency()->getCode());
+        $this->assertEquals(BigDecimal::of('152.78'), $transaction->getTargetMoney()->getAmount()->toScale(2, RoundingMode::HALF_UP));
     }
 }

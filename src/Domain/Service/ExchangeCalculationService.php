@@ -9,8 +9,8 @@ class ExchangeCalculationService
         return $sourceMoney->getAmount()->multipliedBy($exchangeRate->getRate());
     }
 
-    public function calculateFee(BigDecimal $amount): BigDecimal
+    public function calculateFee(BigDecimal $amount, Fee $fee): BigDecimal
     {
-        return $amount->multipliedBy(BigDecimal::of('0.01'));
+        return $amount->multipliedBy($fee->getValue());
     }
 }
