@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 class InMemoryExchangeRateRepository implements ExchangeRateRepositoryInterface
 {
     private array $exchangeRates = [];
 
-    public function __construct(array $exchangeRates)
+    public function __construct(
+        array $exchangeRates
+    )
     {
         foreach ($exchangeRates as $rate) {
             $this->exchangeRates[$rate->getFromCurrency()->getCode() . '->' . $rate->getToCurrency()->getCode()] = $rate;

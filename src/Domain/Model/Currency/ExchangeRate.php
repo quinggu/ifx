@@ -1,18 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 use Brick\Math\BigDecimal;
 
-class ExchangeRate
+readonly class ExchangeRate
 {
-    private Currency $fromCurrency;
-    private Currency $toCurrency;
-    private BigDecimal $rate;
-
-    public function __construct(Currency $fromCurrency, Currency $toCurrency, BigDecimal $rate)
+    public function __construct(
+        private Currency   $fromCurrency,
+        private Currency   $toCurrency,
+        private BigDecimal $rate
+    )
     {
-        $this->fromCurrency = $fromCurrency;
-        $this->toCurrency = $toCurrency;
-        $this->rate = $rate;
     }
 
     public function getFromCurrency(): Currency

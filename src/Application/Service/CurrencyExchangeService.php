@@ -1,20 +1,15 @@
 <?php
 
-use Brick\Math\BigDecimal;
+declare(strict_types=1);
 
-class CurrencyExchangeService
+readonly class CurrencyExchangeService
 {
-    private ExchangeRateRepositoryInterface $exchangeRateRepository;
-    private ExchangeCalculationService $calculationService;
-
     public function __construct(
-        ExchangeRateRepositoryInterface $exchangeRateRepository,
-        ExchangeCalculationService $calculationService,
-        Fee $fee
-    ) {
-        $this->exchangeRateRepository = $exchangeRateRepository;
-        $this->calculationService = $calculationService;
-        $this->fee = $fee;
+        private ExchangeRateRepositoryInterface $exchangeRateRepository,
+        private ExchangeCalculationService      $calculationService,
+        private Fee                             $fee
+    )
+    {
     }
 
     public function sell(ExchangeCurrencyCommand $command): CurrencyExchangeTransaction

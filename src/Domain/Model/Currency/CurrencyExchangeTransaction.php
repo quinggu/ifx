@@ -1,18 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 use Brick\Math\BigDecimal;
 
-class CurrencyExchangeTransaction
+readonly class CurrencyExchangeTransaction
 {
-    private Money $sourceMoney;
-    private Money $targetMoney;
-    private BigDecimal $fee;
-
-    public function __construct(Money $sourceMoney, Money $targetMoney, BigDecimal $fee)
+    public function __construct(
+        private Money      $sourceMoney,
+        private Money      $targetMoney,
+        private BigDecimal $fee
+    )
     {
-        $this->sourceMoney = $sourceMoney;
-        $this->targetMoney = $targetMoney;
-        $this->fee = $fee;
     }
 
     public function getSourceMoney(): Money

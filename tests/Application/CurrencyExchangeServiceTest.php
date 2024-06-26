@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace tests\Application;
 
 use Brick\Math\BigDecimal;
@@ -36,7 +38,7 @@ final class CurrencyExchangeServiceTest extends TestCase
         $transaction = $this->service->sell($command);
 
         $this->assertEquals('GBP', $transaction->getTargetMoney()->getCurrency()->getCode());
-        $this->assertEquals(BigDecimal::of('155.21'), $transaction->getTargetMoney()->getAmount()->toScale(2,RoundingMode::HALF_UP));
+        $this->assertEquals(BigDecimal::of('155.21'), $transaction->getTargetMoney()->getAmount()->toScale(2, RoundingMode::HALF_UP));
     }
 
     public function testSellGBPToEUR(): void
@@ -54,7 +56,7 @@ final class CurrencyExchangeServiceTest extends TestCase
         $transaction = $this->service->buy($command);
 
         $this->assertEquals('GBP', $transaction->getTargetMoney()->getCurrency()->getCode());
-        $this->assertEquals(BigDecimal::of('155.21'), $transaction->getTargetMoney()->getAmount()->toScale(2,RoundingMode::HALF_UP));
+        $this->assertEquals(BigDecimal::of('155.21'), $transaction->getTargetMoney()->getAmount()->toScale(2, RoundingMode::HALF_UP));
     }
 
     public function testBuyGBPToEUR(): void

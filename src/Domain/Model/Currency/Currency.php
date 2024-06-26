@@ -1,12 +1,12 @@
 <?php
 
-class Currency
-{
-    private string $code;
+declare(strict_types=1);
 
-    public function __construct(string $code)
-    {
-        $this->code = $code;
+readonly class Currency
+{
+    public function __construct(
+        private string $code
+    ) {
     }
 
     public function getCode(): string

@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 use Brick\Math\BigDecimal;
 
-class Money
+readonly class Money
 {
-    private Currency $currency;
-    private BigDecimal $amount;
-
-    public function __construct(Currency $currency, BigDecimal $amount)
+    public function __construct(
+        private Currency   $currency,
+        private BigDecimal $amount
+    )
     {
-        $this->currency = $currency;
-        $this->amount = $amount;
     }
 
     public function getCurrency(): Currency
