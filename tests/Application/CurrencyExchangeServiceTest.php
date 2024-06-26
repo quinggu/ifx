@@ -50,7 +50,7 @@ final class CurrencyExchangeServiceTest extends TestCase
         $this->assertEquals(BigDecimal::of('152.78'), $transaction->getTargetMoney()->getAmount()->toScale(2, RoundingMode::HALF_UP));
     }
 
-    public function testBuyEURToGBP(): void
+    public function testBuyGBPFromEUR(): void
     {
         $command = new ExchangeCurrencyCommand('EUR', 'GBP', BigDecimal::of('100.00'));
         $transaction = $this->service->buy($command);
@@ -59,7 +59,7 @@ final class CurrencyExchangeServiceTest extends TestCase
         $this->assertEquals(BigDecimal::of('155.21'), $transaction->getTargetMoney()->getAmount()->toScale(2, RoundingMode::HALF_UP));
     }
 
-    public function testBuyGBPToEUR(): void
+    public function testBuyEURFromGBP(): void
     {
         $command = new ExchangeCurrencyCommand('GBP', 'EUR', BigDecimal::of('100.0'));
         $transaction = $this->service->buy($command);
